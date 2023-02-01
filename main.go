@@ -35,8 +35,10 @@ func contactHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	r := chi.NewRouter()
-	r.Get("/", homeHandler)
-	r.Get("/contact", contactHandler)
+	r.Get("/", controllers.StaticHandler(views.Must(
+		views.ParseFS(templates.FS, "layout-page.gohtml", "home-page.gohtml"))))
+	r.Get("/contact", controllers.StaticHandler(views.Must(
+		views.ParseFS(templates.FS, "layout-page.gohtml", "contact-page.gohtml"))))
 	r.Get("/faq", controllers.FAQ(views.Must(views.ParseFS(templates.FS, "faq.gohtml"))))
 	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Page not found", http.StatusNotFound)
